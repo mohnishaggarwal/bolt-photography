@@ -32,8 +32,8 @@ export default function SidebarItem({
   return (
     <div
       className={classNames(
-        'w-full py-2 flex items-center justify-center hover:bg-accent-300',
-        { 'bg-accent-300': selected },
+        'w-full py-2 flex items-center justify-center hover:bg-accent-300 hover:shadow-md transition',
+        { 'bg-accent-300 shadow-md': selected },
         { 'cursor-pointer': !selected }
       )}
       onClick={() => changeSelection(name)}

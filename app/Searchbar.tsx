@@ -11,11 +11,11 @@ export default function Searchbar() {
   }
 
   return (
-    <div className="mx-2 min-w-[200px] w-3/12 bg-accent-300 p-2 rounded-full flex items-center pl-4">
+    <div className="mx-2 min-w-[200px] w-3/12 bg-accent-300 hover:bg-accent-200 p-2 rounded-full flex items-center pl-4">
       <SearchIcon color="info" />
       <form className="mx-2">
         <input
-          className="bg-accent-300 px-2 placeholder-white outline-none text-sm max-w-md w-full"
+          className="bg-transparent px-2 placeholder-white outline-none text-sm max-w-md w-full"
           onChange={handleChange}
           type="text"
           placeholder="Search"

@@ -4,7 +4,8 @@ import { useState } from 'react';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import Header from './Header';
 import Sidebar from './Sidebar';
-import classNames from 'classnames';
+import Dropdown from '@/app/global_components/Dropdown';
+import IconMenu from './IconMenu';
 
 const theme = createTheme({
   palette: {
@@ -28,23 +29,24 @@ const theme = createTheme({
   },
 });
 
-export default function Homelayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function Homelayout() {
   return (
     <ThemeProvider theme={theme}>
-      <div className="flex w-screen text-white h-screen">
+      <div className="fixed flex w-screen text-white h-screen">
         <Sidebar />
-        <div
-          className={classNames(
-            `w-screen h-screen bg-base transition-all duration-300`
-          )}
-        >
+        <div className="w-screen h-screen bg-base">
           <Header />
-          <hr className="border-1 w-full border-accent-300" />
-          {children}
+          <hr className="border-1 w-full border-accent-100" />
+          <div className="w-full px-8 py-4">
+            <div className="flex justify-between items-center">
+              <div className="flex min-w-[180px] flex-col w-1/6 items-start">
+                <h2 className="text-2xl mb-4">Your Treasures</h2>
+                <Dropdown />
+              </div>
+              <IconMenu />
+            </div>
+          </div>
+          <hr className="border-1 w-full border-accent-100" />
         </div>
       </div>
     </ThemeProvider>
