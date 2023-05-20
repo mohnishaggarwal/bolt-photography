@@ -1,6 +1,6 @@
 import './globals.css';
 import { Inter } from 'next/font/google';
-import Homelayout from './Homelayout';
+import NavigationLinker from './NavigationLinker';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
 
@@ -14,10 +14,12 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const signedIn = false;
+
   return (
     <html lang="en">
       <body className={inter.className}>
-        <Homelayout />
+        <NavigationLinker signedIn={signedIn} />
         {children}
       </body>
     </html>
