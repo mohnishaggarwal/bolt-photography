@@ -1,8 +1,16 @@
+import getCurrentUser from '../actions/getCurrentUser';
 import Image from 'next/image';
 import Background from '@/public/images/signup_wallpaper.webp';
 import ProviderLoginButton from './ProviderLoginButton';
+import { redirect } from 'next/navigation';
 
-export default function Login() {
+export default async function Login() {
+  const currentUser = await getCurrentUser();
+  console.log(currentUser);
+  if (currentUser) {
+    redirect('/dashboard/library');
+  }
+
   return (
     <div className="w-screen h-screen flex bg-base text-white">
       <div className="w-1/2 flex justify-center relative h-screen shadow-2xl">
@@ -29,7 +37,7 @@ export default function Login() {
             <div className="flex flex-col gap-3 items-center justify-center p-4 w-full mx-2">
               <ProviderLoginButton providerName="Google" />
               <ProviderLoginButton providerName="Facebook" />
-              <ProviderLoginButton providerName="Linkedin" />
+              <ProviderLoginButton providerName="Github" />
               <ProviderLoginButton providerName="Instagram" />
             </div>
           </div>

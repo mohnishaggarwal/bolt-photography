@@ -36,17 +36,16 @@ export default function Dropdown() {
         )}
       >
         {MediaOptions.map((option, index) => (
-          <>
+          <div key={index}>
             {option !== selected && (
               <button
                 onClick={() => handleSelect(option)}
-                key={index}
                 className="hover:bg-accent-200 rounded w-full flex items-start p-2"
               >
                 <p className="text-sm">{option}</p>
               </button>
             )}
-          </>
+          </div>
         ))}
       </div>
     </div>
