@@ -1,5 +1,5 @@
 'use client';
-import {ReactNode} from "react";
+import { ReactNode } from 'react';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 
 interface IProps {
@@ -14,7 +14,7 @@ const theme = createTheme({
       dark: '#343131',
     },
     secondary: {
-      main: '#7DF9FF',
+      main: '#c7a8f0',
     },
     info: {
       main: '#FFFFFF',
@@ -28,12 +28,6 @@ const theme = createTheme({
   },
 });
 
-export default function GlobalProviders({children}: IProps) {
-  return (
-    <ThemeProvider theme={theme}>
-      {children}
-    </ThemeProvider>
-  )
+export default function GlobalProviders({ children }: IProps) {
+  return <ThemeProvider theme={theme}>{children}</ThemeProvider>;
 }
-
-

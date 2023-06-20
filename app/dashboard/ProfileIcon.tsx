@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { useAuthContext } from '../contexts/AuthContext';
+import { useAuthContext } from '../contexts/auth/AuthContext';
 import Image from 'next/image';
 import classNames from 'classnames';
 import { signOut } from 'next-auth/react';

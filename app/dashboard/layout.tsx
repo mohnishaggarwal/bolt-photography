@@ -1,11 +1,11 @@
 import { Inter } from 'next/font/google';
-import Homelayout from './Homelayout';
-import AuthContextProvider from '../contexts/AuthContextProvider';
+import Header from './Header';
+import Sidebar from './Sidebar';
+import AuthContextProvider from '../contexts/auth/AuthContextProvider';
 import IUser from '../interfaces/user';
 import getCurrentUser from '../actions/getCurrentUser';
 import { redirect } from 'next/navigation';
-
-const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
+import ImagesContextProvider from '../contexts/images/ImagesContextProvider';
 
 export default async function RootLayout({
   children,
@@ -13,15 +13,21 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   const currentUser = await getCurrentUser();
-  console.log(currentUser);
 
   if (currentUser && currentUser.user) {
     return (
       <html lang="en">
-        <body className={inter.className}>
+        <body>
           <AuthContextProvider user={currentUser.user as IUser}>
-            <Homelayout />
-            {children}
+            <ImagesContextProvider>
+              <div className="bg-base text-white">
+                <Sidebar />
+                <div className="relative pl-72 h-screen">
+                  <Header />
+                  <div className="pt-48 h-full">{children}</div>
+                </div>
+              </div>
+            </ImagesContextProvider>
           </AuthContextProvider>
         </body>
       </html>

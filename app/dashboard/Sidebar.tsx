@@ -27,7 +27,7 @@ export default function Sidebar() {
   }
 
   return (
-    <div className="w-1/4 min-w-[300px] bg-accent-100 h-screen">
+    <div className="w-72 z-20 bg-accent-100 h-screen fixed">
       <div className="w-full flex flex-col">
         <div className="flex justify-center items-center h-48">
           <UploadButton />

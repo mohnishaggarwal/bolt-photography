@@ -1,5 +1,6 @@
 import './globals.css';
 import { Inter } from 'next/font/google';
+import classNames from 'classnames';
 
 import GlobalProviders from './GlobalProviders';
 
@@ -17,7 +18,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className={classNames('bg-base', inter.className)}>
         <GlobalProviders>{children}</GlobalProviders>
       </body>
     </html>
