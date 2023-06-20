@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import SidebarItem from './SidebarItem';
 import UsageDisplay from './UsageDisplay';
 import UploadButton from './UploadButton';
@@ -15,6 +16,7 @@ const MenuOptions = [
 
 export default function Sidebar() {
   const [menuItems, setMenuItems] = useState(MenuOptions);
+  const router = useRouter();
 
   function handleMenuSelection(menuItem: string) {
     const updatedMenuItems = menuItems.map((option) => {
@@ -24,6 +26,25 @@ export default function Sidebar() {
       };
     });
     setMenuItems(updatedMenuItems);
+    switch (menuItem) {
+      case 'Library':
+        router.push('dashboard/library');
+        break;
+      case 'Favorites':
+        router.push('dashboard/favorites');
+        break;
+      case 'Recently Added':
+        router.push('dashboard/recently-added');
+        break;
+      case 'Hidden':
+        break;
+      case 'Trash':
+        router.push('dashboard/trash');
+        break;
+      default:
+        throw new Error('Menu selection property does not exist');
+    }
+    console.log(menuItem);
   }
 
   return (

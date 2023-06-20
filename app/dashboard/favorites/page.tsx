@@ -14,7 +14,7 @@ export default function Library() {
         'h-full': state.images.length == 0,
       })}
     >
-      <ImageManager filter={'library'} />
+      <ImageManager filter={'favorites'} />
     </div>
   );
 }
