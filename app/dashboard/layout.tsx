@@ -1,4 +1,3 @@
-import { Inter } from 'next/font/google';
 import Header from './Header';
 import Sidebar from './Sidebar';
 import AuthContextProvider from '../contexts/auth/AuthContextProvider';
@@ -16,21 +15,17 @@ export default async function RootLayout({
 
   if (currentUser && currentUser.user) {
     return (
-      <html lang="en">
-        <body>
-          <AuthContextProvider user={currentUser.user as IUser}>
-            <ImagesContextProvider>
-              <div className="bg-base text-white">
-                <Sidebar />
-                <div className="relative pl-72 h-screen">
-                  <Header />
-                  <div className="pt-48 h-full">{children}</div>
-                </div>
-              </div>
-            </ImagesContextProvider>
-          </AuthContextProvider>
-        </body>
-      </html>
+      <AuthContextProvider user={currentUser.user as IUser}>
+        <ImagesContextProvider>
+          <div className="bg-base text-white">
+            <Sidebar />
+            <div className="relative pl-72 h-screen">
+              <Header />
+              <div className="pt-48 h-full">{children}</div>
+            </div>
+          </div>
+        </ImagesContextProvider>
+      </AuthContextProvider>
     );
   } else {
     redirect('/login');

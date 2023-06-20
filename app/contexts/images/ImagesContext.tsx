@@ -3,12 +3,19 @@ import IImage from '@/app/interfaces/image';
 
 type ImageState = {
   images: IImage[];
+  selectedImages: IImage[];
 };
 
-type Action = { type: 'ADD_IMAGES'; payload: File[] };
+type Action =
+  | { type: 'ADD_IMAGES'; payload: File[] }
+  | { type: 'TRASH_IMAGES' }
+  | { type: 'SET_SELECTED'; payload: IImage }
+  | { type: 'ADD_TO_SELECTED'; payload: IImage }
+  | { type: 'REMOVE_FROM_SELECTED'; payload: IImage };
 
 export const initialState: ImageState = {
   images: [],
+  selectedImages: [],
 };
 
 export const reducer = (state: ImageState, action: Action): ImageState => {
@@ -20,9 +27,42 @@ export const reducer = (state: ImageState, action: Action): ImageState => {
         recentlyAdded: true,
         trash: false,
         hidden: false,
+        uploadTime: new Date(),
       }));
       const mergedImages = [...state.images, ...newImages];
       return { ...state, images: mergedImages };
+    case 'TRASH_IMAGES':
+      if (state.selectedImages.length === 0) {
+        return state;
+      }
+      const updatedState = state.images.map((image: IImage) => {
+        const isTrash = state.selectedImages.find((trashImage: IImage) => {
+          return image.file === trashImage.file;
+        });
+        if (isTrash) {
+          return {
+            ...image,
+            trash: true,
+          };
+        } else {
+          return image;
+        }
+      });
+      return { ...state, images: updatedState };
+    case 'SET_SELECTED':
+      return { ...state, selectedImages: [action.payload] };
+    case 'ADD_TO_SELECTED':
+      return {
+        ...state,
+        selectedImages: [...state.selectedImages, action.payload],
+      };
+    case 'REMOVE_FROM_SELECTED':
+      return {
+        ...state,
+        selectedImages: state.selectedImages.filter(
+          (image: IImage) => image.file !== action.payload.file
+        ),
+      };
     default:
       return state;
   }

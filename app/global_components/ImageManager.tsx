@@ -1,8 +1,9 @@
 'use client';
 
+import { useEffect } from 'react';
 import { useImagesContext } from '@/app/contexts/images/ImagesContext';
 import ImageDislay from './ImageDisplay';
-import NoImages from '../dashboard/library/NoImages';
+import NoImages from './NoImages';
 import IImage from '../interfaces/image';
 
 export default function ImageManager({ filter }: { filter: string }) {
@@ -12,7 +13,7 @@ export default function ImageManager({ filter }: { filter: string }) {
     let filteredImages: IImage[];
     switch (filter) {
       case 'library':
-        filteredImages = state.images;
+        filteredImages = state.images.filter((image) => !image.trash);
         break;
       case 'favorites':
         filteredImages = state.images.filter(
@@ -22,6 +23,9 @@ export default function ImageManager({ filter }: { filter: string }) {
       case 'recently-added':
         filteredImages = state.images.filter(
           (image) => image.recentlyAdded === true
+        );
+        filteredImages.sort(
+          (img1, img2) => img1.uploadTime.getTime() - img2.uploadTime.getTime()
         );
         break;
       case 'hidden':
@@ -34,11 +38,11 @@ export default function ImageManager({ filter }: { filter: string }) {
         throw new Error("filter property doesn't exist");
     }
 
-    return filteredImages.map((image) => image.file);
+    return filteredImages;
   };
 
   if (state.images.length == 0) {
-    return <NoImages />;
+    return <NoImages filter={filter} />;
   } else {
     return <ImageDislay images={filterImages()} />;
   }
