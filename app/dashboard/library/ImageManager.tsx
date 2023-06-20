@@ -9,6 +9,6 @@ export default function ImageManager() {
   if (state.images.length == 0) {
     return <NoImages />;
   } else {
-    return <ImageDislay images={state.images} />;
+    return <ImageDislay images={state.images.map((image) => image.file)} />;
   }
 }

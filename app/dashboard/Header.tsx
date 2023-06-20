@@ -23,7 +23,7 @@ export default function Header() {
       <div className="w-full px-8 py-4">
         <div className="flex justify-between items-center">
           <div className="flex min-w-[180px] flex-col w-1/6 items-start">
-            <h2 className="text-2xl mb-4">Your Treasures</h2>
+            <h2 className="text-2xl mb-4">Your Uploads</h2>
             <Dropdown />
           </div>
           <IconMenu />
