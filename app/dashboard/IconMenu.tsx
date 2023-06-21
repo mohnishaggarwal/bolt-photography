@@ -9,6 +9,7 @@ import DownloadIcon from '@mui/icons-material/Download';
 import { useImagesContext } from '../contexts/images/ImagesContext';
 import classNames from 'classnames';
 import { usePathname } from 'next/navigation';
+import IImage from '../interfaces/image';
 
 export default function IconMenu() {
   const { state, dispatch } = useImagesContext();
@@ -28,14 +29,35 @@ export default function IconMenu() {
     dispatch({ type: 'REMOVE_FROM_FAVORITES' });
   };
 
+  const handleDownload = () => {
+    state.selectedImages.forEach((image: IImage) => {
+      const url = URL.createObjectURL(image.file);
+
+      const link = document.createElement('a');
+      link.href = url;
+
+      // Set the download attribute with the filename
+      link.setAttribute('download', image.file.name);
+
+      // Programmatically trigger a click on the link to initiate the download
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      // Clean up the object URL after download
+      URL.revokeObjectURL(url);
+      dispatch({ type: 'RESET_SELECTED' });
+    });
+  };
+
   useEffect(() => {
     setIsClickable(state.selectedImages.length !== 0);
   }, [state.selectedImages]);
 
   return (
-    <div className="flex items-center justify-center">
+    <div className="flex items-center z-30 justify-center">
       <button
-        className={classNames('z-30 rounded-full p-1', {
+        className={classNames(' rounded-full p-1', {
           'hover:bg-accent-300': isClickable,
           'pointer-events-none': !isClickable,
         })}
@@ -48,7 +70,8 @@ export default function IconMenu() {
         />
       </button>
       <button
-        className={classNames('z-30 rounded-full p-1', {
+        onClick={handleDownload}
+        className={classNames('rounded-full p-1', {
           'hover:bg-accent-300': isClickable,
           'pointer-events-none': !isClickable,
         })}
@@ -61,7 +84,7 @@ export default function IconMenu() {
         />
       </button>
       <button
-        className={classNames('z-30 rounded-full p-1', {
+        className={classNames('rounded-full p-1', {
           'hover:bg-accent-300': isClickable,
           'pointer-events-none': !isClickable,
         })}

@@ -122,6 +122,8 @@ export const reducer = (state: ImageState, action: Action): ImageState => {
     case 'DELETE_ALL_TRASH':
       const safeImages = state.images.filter((image: IImage) => !image.trash);
       return { ...state, images: safeImages, selectedImages: [] };
+    case 'RESET_SELECTED':
+      return { ...state, selectedImages: [] };
     default:
       return state;
   }
