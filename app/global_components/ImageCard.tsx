@@ -52,7 +52,7 @@ export default function ImageCard({
       (selectedImage: IImage) => image.file === selectedImage.file
     );
     setIsSelected(isSelected !== undefined);
-  }, [state]);
+  }, [state.selectedImages]);
 
   return (
     <label

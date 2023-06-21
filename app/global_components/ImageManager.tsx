@@ -38,8 +38,11 @@ export default function ImageManager({ filter }: { filter: string }) {
       default:
         throw new Error("filter property doesn't exist");
     }
+    console.log('are you updating????');
     setImages(filteredImages);
   }, [state.images]);
+
+  console.log(images);
 
   if (images.length == 0) {
     return (

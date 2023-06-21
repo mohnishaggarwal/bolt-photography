@@ -5,7 +5,6 @@ import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import DownloadIcon from '@mui/icons-material/Download';
-import FileUploadIcon from '@mui/icons-material/FileUpload';
 import { useImagesContext } from '../contexts/images/ImagesContext';
 import classNames from 'classnames';
 

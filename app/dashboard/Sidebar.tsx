@@ -1,24 +1,56 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import SidebarItem from './SidebarItem';
 import UsageDisplay from './UsageDisplay';
 import UploadButton from './UploadButton';
-
-const MenuOptions = [
-  { name: 'Library', selected: true },
-  { name: 'Favorites', selected: false },
-  { name: 'Recently Added', selected: false },
-  { name: 'Hidden', selected: false },
-  { name: 'Trash', selected: false },
-];
+import { useImagesContext } from '../contexts/images/ImagesContext';
 
 export default function Sidebar() {
+  let MenuOptions = [
+    { name: 'Library', selected: false },
+    { name: 'Favorites', selected: false },
+    { name: 'Recently Added', selected: false },
+    { name: 'Hidden', selected: false },
+    { name: 'Trash', selected: false },
+  ];
+
   const [menuItems, setMenuItems] = useState(MenuOptions);
   const router = useRouter();
+  const { dispatch } = useImagesContext();
+
+  const setMenuOptions = () => {
+    const pathname = usePathname();
+    const currentPath = pathname.split('/').pop() || '';
+    let searchTarget: string;
+    switch (currentPath) {
+      case 'library':
+        searchTarget = 'Library';
+        break;
+      case 'favorites':
+        searchTarget = 'Favorites';
+        break;
+      case 'recently-added':
+        searchTarget = 'Recently Added';
+        break;
+      case 'hidden':
+        searchTarget = 'Hidden';
+        break;
+      case 'trash':
+        searchTarget = 'Trash';
+        break;
+      default:
+        throw new Error('Pathname does not exist');
+    }
+    const index = MenuOptions.findIndex(
+      (option) => option.name === searchTarget
+    );
+    MenuOptions[index].selected = true;
+  };
 
   function handleMenuSelection(menuItem: string) {
+    dispatch({ type: 'RESET_SELECTED' });
     const updatedMenuItems = menuItems.map((option) => {
       return {
         ...option,
@@ -26,6 +58,7 @@ export default function Sidebar() {
       };
     });
     setMenuItems(updatedMenuItems);
+
     switch (menuItem) {
       case 'Library':
         router.push('dashboard/library');
@@ -44,8 +77,9 @@ export default function Sidebar() {
       default:
         throw new Error('Menu selection property does not exist');
     }
-    console.log(menuItem);
   }
+
+  setMenuOptions();
 
   return (
     <div className="w-72 z-20 bg-accent-100 h-screen fixed">

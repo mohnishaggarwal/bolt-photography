@@ -21,7 +21,7 @@ export default async function RootLayout({
             <Sidebar />
             <div className="relative pl-72 h-screen">
               <Header />
-              <div className="pt-48 h-full">{children}</div>
+              <div className="p-4 pt-52 h-full">{children}</div>
             </div>
           </div>
         </ImagesContextProvider>
