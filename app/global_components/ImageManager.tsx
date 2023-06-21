@@ -14,7 +14,9 @@ export default function ImageManager({ filter }: { filter: string }) {
     let filteredImages: IImage[];
     switch (filter) {
       case 'library':
-        filteredImages = state.images.filter((image) => !image.trash);
+        filteredImages = state.images.filter(
+          (image) => !image.trash && !image.favorite
+        );
         break;
       case 'favorites':
         filteredImages = state.images.filter(
@@ -38,11 +40,8 @@ export default function ImageManager({ filter }: { filter: string }) {
       default:
         throw new Error("filter property doesn't exist");
     }
-    console.log('are you updating????');
     setImages(filteredImages);
-  }, [state.images]);
-
-  console.log(images);
+  }, [state]);
 
   if (images.length == 0) {
     return (

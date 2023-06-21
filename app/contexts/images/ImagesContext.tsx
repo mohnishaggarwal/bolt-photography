@@ -13,7 +13,11 @@ type Action =
   | { type: 'ADD_TO_SELECTED'; payload: IImage }
   | { type: 'REMOVE_FROM_SELECTED'; payload: IImage }
   | { type: 'RESET_SELECTED' }
-  | { type: 'RECOVER_IMAGES' };
+  | { type: 'FAVORITE_IMAGES' }
+  | { type: 'RECOVER_IMAGES' }
+  | { type: 'REMOVE_FROM_FAVORITES' }
+  | { type: 'DELETE_IMAGES' }
+  | { type: 'DELETE_ALL_TRASH' };
 
 export const initialState: ImageState = {
   images: [],
@@ -34,21 +38,21 @@ export const reducer = (state: ImageState, action: Action): ImageState => {
       const mergedImages = [...state.images, ...newImages];
       return { ...state, images: mergedImages };
     case 'RECOVER_IMAGES':
-      let newImageState = state.images;
+      let recoveredImageState = state.images;
       state.selectedImages.forEach((selectedImage) => {
         const index = state.images.findIndex(
           (image) => image.file === selectedImage.file
         );
         if (index !== -1) {
-          newImageState[index].trash = false;
+          recoveredImageState[index].trash = false;
         }
       });
-      return { ...state, images: newImageState, selectedImages: [] };
+      return { ...state, images: recoveredImageState, selectedImages: [] };
     case 'TRASH_IMAGES':
       if (state.selectedImages.length === 0) {
         return state;
       }
-      const updatedImageState = state.images.map((image: IImage) => {
+      const trashImageState = state.images.map((image: IImage) => {
         const isTrash = state.selectedImages.find((trashImage: IImage) => {
           return image.file === trashImage.file;
         });
@@ -61,7 +65,38 @@ export const reducer = (state: ImageState, action: Action): ImageState => {
           return image;
         }
       });
-      return { ...state, selectedImages: [], images: updatedImageState };
+      return { ...state, selectedImages: [], images: trashImageState };
+    case 'FAVORITE_IMAGES':
+      if (state.selectedImages.length === 0) {
+        return state;
+      }
+      const favoritedImages = state.images.map((image: IImage) => {
+        const isFavorite = state.selectedImages.find(
+          (favoriteImage: IImage) => {
+            return image.file === favoriteImage.file;
+          }
+        );
+        if (isFavorite) {
+          return {
+            ...image,
+            favorite: true,
+          };
+        } else {
+          return image;
+        }
+      });
+      return { ...state, selectedImages: [], images: favoritedImages };
+    case 'REMOVE_FROM_FAVORITES':
+      let unFavoritedImageState = state.images;
+      state.selectedImages.forEach((selectedImage) => {
+        const index = state.images.findIndex(
+          (image) => image.file === selectedImage.file
+        );
+        if (index !== -1) {
+          unFavoritedImageState[index].favorite = false;
+        }
+      });
+      return { ...state, images: unFavoritedImageState, selectedImages: [] };
     case 'SET_SELECTED':
       return { ...state, selectedImages: [action.payload] };
     case 'ADD_TO_SELECTED':
@@ -76,6 +111,17 @@ export const reducer = (state: ImageState, action: Action): ImageState => {
           (image: IImage) => image.file !== action.payload.file
         ),
       };
+    case 'DELETE_IMAGES':
+      const nonDeletedImages = state.images.filter((image: IImage) => {
+        const isDeleted = state.selectedImages.findIndex(
+          (deletedImage: IImage) => deletedImage.file === image.file
+        );
+        return isDeleted === -1;
+      });
+      return { ...state, images: nonDeletedImages, selectedImages: [] };
+    case 'DELETE_ALL_TRASH':
+      const safeImages = state.images.filter((image: IImage) => !image.trash);
+      return { ...state, images: safeImages, selectedImages: [] };
     default:
       return state;
   }

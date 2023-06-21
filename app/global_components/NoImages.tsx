@@ -8,13 +8,13 @@ export default function NoImages({ filter }: { filter: string }) {
       case 'library':
         return 'No uploads - yet!';
       case 'favorites':
-        return 'No favorites - yet!';
+        return 'No favorites 😔';
       case 'recently-added':
         return 'No uploads - yet!';
       case 'hidden':
         return '';
       case 'trash':
-        return 'No trash - yet!';
+        return 'No trash 😌';
       default:
         throw new Error('filter option does not exist');
     }
