@@ -1,10 +1,10 @@
-import Header from './Header';
-import Sidebar from './Sidebar';
 import AuthContextProvider from '../contexts/auth/AuthContextProvider';
 import IUser from '../interfaces/user';
 import getCurrentUser from '../actions/getCurrentUser';
 import { redirect } from 'next/navigation';
 import ImagesContextProvider from '../contexts/images/ImagesContextProvider';
+import LayoutClient from './LayoutHome';
+import SidebarContextProvider from '../contexts/sidebar/SidebarContextProvider';
 
 export default async function RootLayout({
   children,
@@ -17,13 +17,9 @@ export default async function RootLayout({
     return (
       <AuthContextProvider user={currentUser.user as IUser}>
         <ImagesContextProvider>
-          <div className="bg-base text-white">
-            <Sidebar />
-            <div className="relative pl-72 h-screen">
-              <Header />
-              <div className="p-4 pt-52 h-full">{children}</div>
-            </div>
-          </div>
+          <SidebarContextProvider>
+            <LayoutClient>{children}</LayoutClient>
+          </SidebarContextProvider>
         </ImagesContextProvider>
       </AuthContextProvider>
     );

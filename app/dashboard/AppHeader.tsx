@@ -11,7 +11,7 @@ export default function AppHeader() {
         <div className="flex justify-between items-center">
           <div className="flex items-center justify-center">
             <BoltIcon color="secondary" fontSize="large" />
-            <h1 className="text-3xl">Bolt Photography</h1>
+            <h1 className="text-3xl">Bolt</h1>
           </div>
           <Searchbar />
           <ProfileIcon />
