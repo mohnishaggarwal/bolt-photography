@@ -10,9 +10,11 @@ import { useImagesContext } from '../contexts/images/ImagesContext';
 import classNames from 'classnames';
 import { usePathname } from 'next/navigation';
 import IImage from '../interfaces/image';
+import FeatureInProgressModal from '../global_components/modals/FeatureInProgressModal';
 
 export default function IconMenu() {
   const { state, dispatch } = useImagesContext();
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [isClickable, setIsClickable] = useState(true);
   const pathname = usePathname();
   const currentPath = pathname.split('/').pop() || '';
@@ -55,12 +57,13 @@ export default function IconMenu() {
   }, [state.selectedImages]);
 
   return (
-    <div className="flex items-center z-30 justify-center">
+    <div className="flex items-center z-10 justify-center">
       <button
         className={classNames(' rounded-full p-1', {
           'hover:bg-accent-300': isClickable,
           'pointer-events-none': !isClickable,
         })}
+        onClick={() => setIsModalOpen(true)}
       >
         <VisibilityOffIcon
           className={classNames({
@@ -122,6 +125,10 @@ export default function IconMenu() {
           })}
         />
       </button>
+      <FeatureInProgressModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      />
     </div>
   );
 }

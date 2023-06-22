@@ -27,9 +27,7 @@ export default function ImageManager({ filter }: { filter: string }) {
         filteredImages = state.images.filter(
           (image) => image.recentlyAdded === true
         );
-        filteredImages.sort(
-          (img1, img2) => img1.uploadTime.getTime() - img2.uploadTime.getTime()
-        );
+        filteredImages.sort((img1, img2) => img1.uploadTime - img2.uploadTime);
         break;
       case 'hidden':
         filteredImages = state.images.filter((image) => image.hidden === true);

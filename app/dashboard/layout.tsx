@@ -4,7 +4,7 @@ import getCurrentUser from '../actions/getCurrentUser';
 import { redirect } from 'next/navigation';
 import ImagesContextProvider from '../contexts/images/ImagesContextProvider';
 import LayoutClient from './LayoutHome';
-import SidebarContextProvider from '../contexts/sidebar/SidebarContextProvider';
+import MobileContextProvider from '../contexts/mobile/MobileContextProvider';
 
 export default async function RootLayout({
   children,
@@ -17,9 +17,9 @@ export default async function RootLayout({
     return (
       <AuthContextProvider user={currentUser.user as IUser}>
         <ImagesContextProvider>
-          <SidebarContextProvider>
+          <MobileContextProvider>
             <LayoutClient>{children}</LayoutClient>
-          </SidebarContextProvider>
+          </MobileContextProvider>
         </ImagesContextProvider>
       </AuthContextProvider>
     );

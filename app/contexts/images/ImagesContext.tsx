@@ -33,7 +33,8 @@ export const reducer = (state: ImageState, action: Action): ImageState => {
         recentlyAdded: true,
         trash: false,
         hidden: false,
-        uploadTime: new Date(),
+        uploadTime: Math.floor(Date.now() / 1000),
+        tags: [],
       }));
       const mergedImages = [...state.images, ...newImages];
       return { ...state, images: mergedImages };

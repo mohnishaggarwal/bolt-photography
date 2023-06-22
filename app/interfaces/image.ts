@@ -4,7 +4,8 @@ interface IImage {
   recentlyAdded: boolean;
   hidden: boolean;
   trash: boolean;
-  uploadTime: Date;
+  uploadTime: number;
+  tags: string[]
 }
 
 export default IImage;

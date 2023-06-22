@@ -1,6 +1,6 @@
-import { SyntheticEvent } from 'react';
 import Image from 'next/image';
 import { useImagesContext } from '@/app/contexts/images/ImagesContext';
+import Modal from './Modal';
 
 export default function DeleteImagesModal({
   numImagesDelete,
@@ -14,13 +14,6 @@ export default function DeleteImagesModal({
   onClose: () => void;
 }) {
   const { dispatch } = useImagesContext();
-
-  const handleClose = (event: SyntheticEvent<HTMLDivElement>) => {
-    const target = event.target as HTMLDivElement;
-    if (target.id === 'modal-wrapper') {
-      onClose();
-    }
-  };
 
   const handleDelete = () => {
     if (deleteAll) {
@@ -37,11 +30,7 @@ export default function DeleteImagesModal({
     return null;
   }
   return (
-    <div
-      className="fixed inset-0 bg-black bg-opacity-25 backdrop-blur-sm flex justify-center items-center z-50"
-      onClick={handleClose}
-      id="modal-wrapper"
-    >
+    <Modal isOpen={isOpen} onClose={onClose}>
       <div className="bg-accent-300 relative p-8 flex flex-col justify-center items-center text-white rounded-lg w-3/12 max-w-[300px]">
         <Image
           src="/images/delete_vector.svg"
@@ -73,6 +62,6 @@ export default function DeleteImagesModal({
           </button>
         </div>
       </div>
-    </div>
+    </Modal>
   );
 }

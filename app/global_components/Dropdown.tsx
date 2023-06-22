@@ -4,11 +4,13 @@ import { useState } from 'react';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import classNames from 'classnames';
+import FeatureInProgressModal from './modals/FeatureInProgressModal';
 
 const MediaOptions = ['Photos', 'Videos', 'All Files'];
 
 export default function Dropdown() {
   const [isOpen, setIsOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [selected, setSelected] = useState('All Files');
 
   function handleOpenClick() {
@@ -16,6 +18,11 @@ export default function Dropdown() {
   }
 
   function handleSelect(option: string) {
+    console.log(option);
+    if (option === 'Videos') {
+      setIsModalOpen(true);
+      return;
+    }
     setSelected(option);
     setIsOpen(false);
   }
@@ -48,6 +55,10 @@ export default function Dropdown() {
           </div>
         ))}
       </div>
+      <FeatureInProgressModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      />
     </div>
   );
 }

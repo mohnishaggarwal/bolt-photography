@@ -19,7 +19,7 @@ export default function UploadButton() {
   };
 
   return (
-    <label className="w-3/5 min-w-[150px] bg-accent-300 hover:bg-accent-200 rounded-full shadow-lg py-2 px-4 text-center text-white cursor-pointer">
+    <label className="w-3/5 min-w-[150px] z-20 bg-accent-300 hover:bg-accent-200 rounded-full shadow-lg py-2 px-4 text-center text-white cursor-pointer">
       <div className="flex justify-evenly items-center w-full my-1">
         Add New
         <AddIcon color="secondary" fontSize="large" />

@@ -6,10 +6,12 @@ import { BsLayoutSidebarInset } from 'react-icons/bs';
 import { BsLayoutSidebarInsetReverse } from 'react-icons/bs';
 import { usePathname } from 'next/navigation';
 import DeleteMenu from './DeleteMenu';
-import { useSidebarContext } from '../contexts/sidebar/SidebarContext';
+import { useMobileContext } from '../contexts/mobile/MobileContext';
+import classNames from 'classnames';
 
 export default function UploadHeader() {
-  const { showSidebar, handleSidebarToggle } = useSidebarContext();
+  const { isSidebarVisible, handleSidebarToggle, isMobileScreen } =
+    useMobileContext();
   const pathname = usePathname();
   const currentPath = pathname.split('/').pop() || '';
 
@@ -38,9 +40,11 @@ export default function UploadHeader() {
             <div className="flex justify-center items-center  mb-4">
               <button
                 onClick={handleSidebarToggle}
-                className="hover:bg-accent-200 p-1 rounded-md"
+                className={classNames('hover:bg-accent-200 p-1 rounded-md', {
+                  'pointer-events-none text-accent-200': isMobileScreen,
+                })}
               >
-                {showSidebar ? (
+                {isSidebarVisible ? (
                   <BsLayoutSidebarInset size={25} />
                 ) : (
                   <BsLayoutSidebarInsetReverse size={25} />

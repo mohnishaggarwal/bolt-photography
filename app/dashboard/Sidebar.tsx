@@ -6,6 +6,7 @@ import SidebarItem from './SidebarItem';
 import UsageDisplay from './UsageDisplay';
 import UploadButton from './UploadButton';
 import { useImagesContext } from '../contexts/images/ImagesContext';
+import FeatureInProgressModal from '../global_components/modals/FeatureInProgressModal';
 
 export default function Sidebar() {
   let MenuOptions = [
@@ -17,6 +18,7 @@ export default function Sidebar() {
   ];
 
   const [menuItems, setMenuItems] = useState(MenuOptions);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const router = useRouter();
   const { dispatch } = useImagesContext();
 
@@ -50,6 +52,11 @@ export default function Sidebar() {
   };
 
   function handleMenuSelection(menuItem: string) {
+    if (menuItem === 'Hidden') {
+      setIsModalOpen(true);
+      return;
+    }
+
     dispatch({ type: 'RESET_SELECTED' });
     const updatedMenuItems = menuItems.map((option) => {
       return {
@@ -82,7 +89,7 @@ export default function Sidebar() {
   setMenuOptions();
 
   return (
-    <div className="w-72 z-10 bg-accent-100 h-screen fixed">
+    <div className="w-72 bg-accent-100 h-screen fixed z-10">
       <div className="w-full flex flex-col">
         <div className="flex justify-center items-center h-48">
           <UploadButton />
@@ -97,6 +104,10 @@ export default function Sidebar() {
         ))}
         <hr className="my-4 border-accent-300" />
         <UsageDisplay />
+        <FeatureInProgressModal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+        />
       </div>
     </div>
   );

@@ -39,7 +39,7 @@ export default function NoImages({ filter }: { filter: string }) {
 
   return (
     <div className="h-full w-full flex justify-center items-center">
-      <div className="w-3/12 flex flex-col justify-center items-center">
+      <div className="w-3/12 min-w-[300px] flex flex-col justify-center items-center">
         <Image
           src="/images/not_found_other.svg"
           alt="Not found image"

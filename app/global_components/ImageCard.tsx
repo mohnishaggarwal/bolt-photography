@@ -4,6 +4,7 @@ import classNames from 'classnames';
 import { MouseEvent, SyntheticEvent, useState, useEffect } from 'react';
 import { useImagesContext } from '@/app/contexts/images/ImagesContext';
 import IImage from '@/app/interfaces/image';
+import { useMobileContext } from '../contexts/mobile/MobileContext';
 
 export default function ImageCard({
   index,
@@ -15,7 +16,9 @@ export default function ImageCard({
   const [textLeft, setTextLeft] = useState(0);
   const [spanMultiple, setSpanMultiple] = useState(false);
   const { state, dispatch } = useImagesContext();
+  const { isMobileScreen } = useMobileContext();
   const [isSelected, setIsSelected] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
 
   const getTextLeft = (
     height: number,
@@ -54,6 +57,10 @@ export default function ImageCard({
     setIsSelected(isSelected !== undefined);
   }, [state.selectedImages]);
 
+  const getTagsString = () => {
+    return image.tags.map((tag) => `#${tag}`).join(' ');
+  };
+
   return (
     <label
       className={classNames(
@@ -61,20 +68,37 @@ export default function ImageCard({
         { 'border-highlight border-2': isSelected }
       )}
       onClick={handleClick}
-      style={{ gridColumn: spanMultiple ? 'span 2 / span 2' : '' }}
+      style={{
+        gridColumn: spanMultiple && !isMobileScreen ? 'span 2 / span 2' : '',
+      }}
     >
-      <>
-        <img
-          src={URL.createObjectURL(image.file)}
-          alt={`Uploaded Image ${index + 1}`}
-          className="w-full h-full object-contain rounded-md"
-          onLoad={handleImageLoad}
-        />
-        <div style={{ marginLeft: textLeft }}>
-          <p className="text-sm">{image.file.name}</p>
-          <p className="text-sm text-highlight">generating tags...</p>
-        </div>
-      </>
+      <img
+        src={URL.createObjectURL(image.file)}
+        alt={`Uploaded Image ${index + 1}`}
+        className="w-full h-full object-contain rounded-md"
+        onLoad={handleImageLoad}
+      />
+      <div
+        style={{ marginLeft: textLeft }}
+        className={classNames('mt-1 truncate')}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+      >
+        <p
+          className={classNames('text-sm', {
+            'whitespace-normal overflow-visible': isHovered,
+          })}
+        >
+          {image.file.name}
+        </p>
+        <p
+          className={classNames('text-sm text-highlight', {
+            'whitespace-normal overflow-visible': isHovered,
+          })}
+        >
+          {image.tags.length > 0 ? getTagsString() : 'generating tags...'}
+        </p>
+      </div>
     </label>
   );
 }
