@@ -20,7 +20,7 @@ export default function FeatureInProgressModal({
         />
         <center className="text-sm">
           <h2 className="text-2xl mb-2 font-semibold">Feature in Progress!</h2>
-          This feature is still currently in development. Sit tight as we roll
+          This feature is still currently in development. Sit tight mas we roll
           it out soon!
         </center>
         <button
