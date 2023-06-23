@@ -1,8 +1,10 @@
 import { createContext, useContext, Dispatch } from 'react';
 import IImage from '@/app/interfaces/image';
 
-type ImageState = {
+export type ImageState = {
   images: IImage[];
+  favoritedImages: [];
+  trashedImages: [];
   selectedImages: IImage[];
 };
 
@@ -19,8 +21,10 @@ type Action =
   | { type: 'DELETE_IMAGES' }
   | { type: 'DELETE_ALL_TRASH' };
 
-export const initialState: ImageState = {
+const initialState: ImageState = {
   images: [],
+  favoritedImages: [],
+  trashedImages: [],
   selectedImages: [],
 };
 
