@@ -6,6 +6,7 @@ export type ImageState = {
   favoritedImages: [];
   trashedImages: [];
   selectedImages: IImage[];
+  hiddenImages: IImage[];
 };
 
 type Action =
@@ -26,6 +27,7 @@ const initialState: ImageState = {
   favoritedImages: [],
   trashedImages: [],
   selectedImages: [],
+  hiddenImages: [],
 };
 
 export const reducer = (state: ImageState, action: Action): ImageState => {
