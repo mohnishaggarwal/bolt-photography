@@ -14,26 +14,19 @@ export default function ImageManager({ filter }: { filter: string }) {
     let filteredImages: IImage[];
     switch (filter) {
       case 'library':
-        filteredImages = state.images.filter(
-          (image) => !image.trash && !image.favorite
-        );
+        filteredImages = state.images;
         break;
       case 'favorites':
-        filteredImages = state.images.filter(
-          (image) => image.favorite === true
-        );
+        filteredImages = state.favoritedImages;
         break;
       case 'recently-added':
-        filteredImages = state.images.filter(
-          (image) => image.recentlyAdded === true
-        );
-        filteredImages.sort((img1, img2) => img1.uploadTime - img2.uploadTime);
+        filteredImages = state.images.sort((imgA, imgB) => imgB.uploadTime - imgA.uploadTime);
         break;
       case 'hidden':
-        filteredImages = state.images.filter((image) => image.hidden === true);
+        filteredImages = state.hiddenImages;
         break;
       case 'trash':
-        filteredImages = state.images.filter((image) => image.trash === true);
+        filteredImages = state.trashedImages;
         break;
       default:
         throw new Error("filter property doesn't exist");

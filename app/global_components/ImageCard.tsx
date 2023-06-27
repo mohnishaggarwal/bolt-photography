@@ -52,7 +52,7 @@ export default function ImageCard({
 
   useEffect(() => {
     const isSelected = state.selectedImages.find(
-      (selectedImage: IImage) => image.file === selectedImage.file
+      (selectedImage: IImage) => image === selectedImage
     );
     setIsSelected(isSelected !== undefined);
   }, [state.selectedImages]);
@@ -73,7 +73,7 @@ export default function ImageCard({
       }}
     >
       <img
-        src={URL.createObjectURL(image.file)}
+        src={image.src}
         alt={`Uploaded Image ${index + 1}`}
         className="w-full h-full object-contain rounded-md"
         onLoad={handleImageLoad}
@@ -89,7 +89,7 @@ export default function ImageCard({
             'whitespace-normal overflow-visible': isHovered,
           })}
         >
-          {image.file.name}
+          {image.name}
         </p>
         <p
           className={classNames('text-sm text-highlight', {

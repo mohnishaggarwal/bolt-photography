@@ -37,16 +37,15 @@ export default async function RootLayout({
   const currentUser = await getCurrentUser();
 
   if (currentUser && currentUser.user && currentUser.user.email) {
-    const data = await fetchImages(currentUser?.user?.email);
-    // console.log(data);
+    const fetchedImages = await fetchImages(currentUser?.user?.email);
 
     return (
       <AuthContextProvider user={currentUser.user as IUser}>
-        {/* <ImagesContextProvider>
+        <ImagesContextProvider fetchedImages={fetchedImages.image_urls}>
           <MobileContextProvider>
             <LayoutClient>{children}</LayoutClient>
           </MobileContextProvider>
-        </ImagesContextProvider> */}
+        </ImagesContextProvider>
       </AuthContextProvider>
     );
   } else {

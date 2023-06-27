@@ -1,8 +1,6 @@
 interface IImage {
-  file: File;
-  favorite: boolean;
-  hidden: boolean;
-  trash: boolean;
+  src: string;
+  name: string;
   uploadTime: number;
   tags: string[]
 }

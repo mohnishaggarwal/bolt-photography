@@ -3,14 +3,14 @@ import IImage from '@/app/interfaces/image';
 
 export type ImageState = {
   images: IImage[];
-  favoritedImages: [];
-  trashedImages: [];
+  favoritedImages: IImage[];
+  trashedImages: IImage[];
   selectedImages: IImage[];
   hiddenImages: IImage[];
 };
 
 type Action =
-  | { type: 'ADD_IMAGES'; payload: File[] }
+  | { type: 'ADD_IMAGES'; payload: Array<{ name: string; url: string }> }
   | { type: 'TRASH_IMAGES' }
   | { type: 'SET_SELECTED'; payload: IImage }
   | { type: 'ADD_TO_SELECTED'; payload: IImage }
@@ -33,77 +33,56 @@ const initialState: ImageState = {
 export const reducer = (state: ImageState, action: Action): ImageState => {
   switch (action.type) {
     case 'ADD_IMAGES':
-      const newImages = action.payload.map((file) => ({
-        file,
-        favorite: false,
-        recentlyAdded: true,
-        trash: false,
-        hidden: false,
-        uploadTime: Math.floor(Date.now() / 1000),
-        tags: [],
-      }));
+      const newImages = action.payload.map(
+        ({ name, url }: { name: string; url: string }) => ({
+          src: url,
+          name: name,
+          uploadTime: Math.floor(Date.now() / 1000),
+          tags: [] as string[],
+        })
+      );
       const mergedImages = [...state.images, ...newImages];
       return { ...state, images: mergedImages };
     case 'RECOVER_IMAGES':
-      let recoveredImageState = state.images;
-      state.selectedImages.forEach((selectedImage) => {
-        const index = state.images.findIndex(
-          (image) => image.file === selectedImage.file
-        );
-        if (index !== -1) {
-          recoveredImageState[index].trash = false;
+      for (const selectedImg of state.selectedImages) {
+        const selectedImgIndex = state.trashedImages.indexOf(selectedImg);
+        if (selectedImgIndex == -1) {
+          throw new Error("Selected image doesn't exist");
         }
-      });
-      return { ...state, images: recoveredImageState, selectedImages: [] };
+        const removedImage = state.trashedImages.splice(selectedImgIndex);
+        state.images = [...state.images, ...removedImage];
+      }
+      return { ...state };
     case 'TRASH_IMAGES':
-      if (state.selectedImages.length === 0) {
-        return state;
-      }
-      const trashImageState = state.images.map((image: IImage) => {
-        const isTrash = state.selectedImages.find((trashImage: IImage) => {
-          return image.file === trashImage.file;
-        });
-        if (isTrash) {
-          return {
-            ...image,
-            trash: true,
-          };
-        } else {
-          return image;
+      for (const selectedImg of state.selectedImages) {
+        const selectedImgIndex = state.images.indexOf(selectedImg);
+        if (selectedImgIndex == -1) {
+          throw new Error("Selected image doesn't exist");
         }
-      });
-      return { ...state, selectedImages: [], images: trashImageState };
+        const removedImage = state.images.splice(selectedImgIndex);
+        state.trashedImages = [...state.trashedImages, ...removedImage];
+      }
+      return { ...state };
     case 'FAVORITE_IMAGES':
-      if (state.selectedImages.length === 0) {
-        return state;
+      for (const selectedImg of state.selectedImages) {
+        const selectedImgIndex = state.images.indexOf(selectedImg);
+        if (selectedImgIndex == -1) {
+          throw new Error("Selected image doesn't exist");
+        }
+        const removedImage = state.images.splice(selectedImgIndex);
+        state.favoritedImages = [...state.favoritedImages, ...removedImage];
       }
-      const favoritedImages = state.images.map((image: IImage) => {
-        const isFavorite = state.selectedImages.find(
-          (favoriteImage: IImage) => {
-            return image.file === favoriteImage.file;
-          }
-        );
-        if (isFavorite) {
-          return {
-            ...image,
-            favorite: true,
-          };
-        } else {
-          return image;
-        }
-      });
-      return { ...state, selectedImages: [], images: favoritedImages };
+      return { ...state };
     case 'REMOVE_FROM_FAVORITES':
-      let unFavoritedImageState = state.images;
-      state.selectedImages.forEach((selectedImage) => {
-        const index = state.images.findIndex(
-          (image) => image.file === selectedImage.file
-        );
-        if (index !== -1) {
-          unFavoritedImageState[index].favorite = false;
+      for (const selectedImg of state.selectedImages) {
+        const selectedImgIndex = state.favoritedImages.indexOf(selectedImg);
+        if (selectedImgIndex == -1) {
+          throw new Error("Selected image doesn't exist");
         }
-      });
-      return { ...state, images: unFavoritedImageState, selectedImages: [] };
+        const removedImage = state.favoritedImages.splice(selectedImgIndex);
+        state.images = [...state.images, ...removedImage];
+      }
+      return { ...state };
     case 'SET_SELECTED':
       return { ...state, selectedImages: [action.payload] };
     case 'ADD_TO_SELECTED':
@@ -115,20 +94,20 @@ export const reducer = (state: ImageState, action: Action): ImageState => {
       return {
         ...state,
         selectedImages: state.selectedImages.filter(
-          (image: IImage) => image.file !== action.payload.file
+          (image: IImage) => image !== action.payload
         ),
       };
     case 'DELETE_IMAGES':
-      const nonDeletedImages = state.images.filter((image: IImage) => {
-        const isDeleted = state.selectedImages.findIndex(
-          (deletedImage: IImage) => deletedImage.file === image.file
-        );
-        return isDeleted === -1;
-      });
-      return { ...state, images: nonDeletedImages, selectedImages: [] };
+      for (const selectedImg of state.selectedImages) {
+        const selectedImgIndex = state.trashedImages.indexOf(selectedImg);
+        if (selectedImgIndex == -1) {
+          throw new Error("Selected image doesn't exist");
+        }
+        state.trashedImages.splice(selectedImgIndex, 1);
+      }
+      return { ...state };
     case 'DELETE_ALL_TRASH':
-      const safeImages = state.images.filter((image: IImage) => !image.trash);
-      return { ...state, images: safeImages, selectedImages: [] };
+      return { ...state, trashedImages: [], selectedImages: [] };
     case 'RESET_SELECTED':
       return { ...state, selectedImages: [] };
     default:
