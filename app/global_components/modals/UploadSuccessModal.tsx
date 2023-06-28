@@ -21,7 +21,7 @@ function ModalBody() {
     <div className="m-4 flex">
       <p className="text-left">
         Your images were successfully uploaded onto Bolt! Tags typically take
-        around one to two minutes to generate.
+        around two to five minutes to generate.
       </p>
     </div>
   );

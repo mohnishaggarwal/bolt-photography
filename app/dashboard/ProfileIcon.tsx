@@ -36,7 +36,7 @@ export default function ProfileIcon() {
       </button>
       <div
         className={classNames(
-          'absolute bg-accent-300 z-10 top-[92%] mt-1 w-fit rounded shadow-lg transition-opacity right-0.5',
+          'absolute bg-accent-300 z-50 top-[92%] mt-1 w-fit rounded shadow-lg transition-opacity right-0.5',
           { 'opacity-0': !isOpen, 'opactiy-100': isOpen }
         )}
       >

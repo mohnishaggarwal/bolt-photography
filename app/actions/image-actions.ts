@@ -10,9 +10,7 @@ async function postImages(
 
   url.searchParams.append('email', email);
 
-  const imageNamesQuery: string = images
-    .map((img: File) => encodeURIComponent(img.name))
-    .join(',');
+  const imageNamesQuery: string = images.map((img: File) => img.name).join(',');
   const contentTypeQuery: string = images
     .map((img: File) => img.type)
     .join(',');
@@ -67,23 +65,16 @@ async function postImages(
 }
 
 async function fetchImages(userEmail: string) {
-  const url = `${process.env.NEXT_PUBLIC_API_BASEURL}/images`;
+  const url = new URL(`${process.env.NEXT_PUBLIC_API_BASEURL}/images`);
+  url.searchParams.append('email', userEmail);
 
   const params: { [key: string]: string } = {
     email: userEmail,
   };
 
-  const queryString: string = Object.keys(params)
-    .map(
-      (key) => `${encodeURIComponent(key)}=${encodeURIComponent(params[key])}`
-    )
-    .join('&');
+  console.log(url.toString());
 
-  console.log(queryString);
-
-  const fullUrl: string = `${url}?${queryString}`;
-
-  const res = await fetch(fullUrl);
+  const res = await fetch(url.toString());
 
   if (!res.ok) {
     throw new Error('Error occurred when fetching posts');
