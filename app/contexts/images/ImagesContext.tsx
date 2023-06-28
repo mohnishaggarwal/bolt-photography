@@ -9,8 +9,13 @@ export type ImageState = {
   hiddenImages: IImage[];
 };
 
+interface IUploadedImage {
+  name: string;
+  url: string;
+}
+
 type Action =
-  | { type: 'ADD_IMAGES'; payload: Array<{ name: string; url: string }> }
+  | { type: 'ADD_IMAGES'; payload: Array<IUploadedImage> }
   | { type: 'TRASH_IMAGES' }
   | { type: 'SET_SELECTED'; payload: IImage }
   | { type: 'ADD_TO_SELECTED'; payload: IImage }
@@ -33,14 +38,12 @@ const initialState: ImageState = {
 export const reducer = (state: ImageState, action: Action): ImageState => {
   switch (action.type) {
     case 'ADD_IMAGES':
-      const newImages = action.payload.map(
-        ({ name, url }: { name: string; url: string }) => ({
-          src: url,
-          name: name,
-          uploadTime: Math.floor(Date.now() / 1000),
-          tags: [] as string[],
-        })
-      );
+      const newImages = action.payload.map(({ name, url }: IUploadedImage) => ({
+        src: url,
+        name: name,
+        uploadTime: Math.floor(Date.now() / 1000),
+        tags: [] as string[],
+      }));
       const mergedImages = [...state.images, ...newImages];
       return { ...state, images: mergedImages };
     case 'RECOVER_IMAGES':

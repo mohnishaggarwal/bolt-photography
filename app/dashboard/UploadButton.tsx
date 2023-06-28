@@ -5,17 +5,25 @@ import AddIcon from '@mui/icons-material/Add';
 import { useImagesContext } from '@/app/contexts/images/ImagesContext';
 import UploadErrorModal from '../global_components/modals/UploadErrorModal';
 import UploadSuccessModal from '../global_components/modals/UploadSuccessModal';
+import { postImages } from '@/app/actions/image-actions';
+import { useAuthContext } from '../contexts/auth/AuthContext';
+import APICallResult from '../interfaces/api-call-result';
 
 export default function UploadButton() {
   const { dispatch } = useImagesContext();
+  const { user } = useAuthContext();
   const [errorModalOpen, setErrorModalOpen] = useState(false);
+  const [errorMsg, setErrorMsg] = useState('');
   const [successModalOpen, setSuccessModalOpen] = useState(false);
 
-  const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (event: ChangeEvent<HTMLInputElement>) => {
     const fileList = event.target.files;
 
     for (const file of Array.from(fileList!)) {
       if (file.type !== 'image/jpeg' && file.type !== 'image/png') {
+        setErrorMsg(
+          'Currently, Bolt only supports PNGs and JPEGs. Be patient with us as we slowly begin supporting more types!'
+        );
         setErrorModalOpen(true);
         return;
       }
@@ -24,13 +32,22 @@ export default function UploadButton() {
       /\.(jpg|png)$/i.test(file.name)
     );
 
-    const imageNamesAndUrls = jpgsAndPngs.map((image: File) => ({
-      url: URL.createObjectURL(image),
-      name: image.name,
-    }));
+    const apiResponse: APICallResult = await postImages(
+      user.email,
+      jpgsAndPngs
+    );
+    if (apiResponse.wasCallSuccessful) {
+      const imageNamesAndUrls = jpgsAndPngs.map((image: File) => ({
+        url: URL.createObjectURL(image),
+        name: image.name,
+      }));
 
-    dispatch({ type: 'ADD_IMAGES', payload: imageNamesAndUrls });
-    setSuccessModalOpen(true);
+      dispatch({ type: 'ADD_IMAGES', payload: imageNamesAndUrls });
+      setSuccessModalOpen(true);
+    } else {
+      setErrorMsg(apiResponse.errorMsg);
+      setErrorModalOpen(true);
+    }
   };
 
   return (
@@ -51,6 +68,7 @@ export default function UploadButton() {
           <UploadErrorModal
             isOpen={errorModalOpen}
             onClose={() => setErrorModalOpen(false)}
+            errorMsg={errorMsg}
           />
         )}
       </label>

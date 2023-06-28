@@ -16,18 +16,15 @@ function ModalHeader() {
   );
 }
 
-function ModalBody() {
+function ModalBody({ errorMsg }: { errorMsg: string }) {
   return (
     <div className="m-4 flex">
-      <p className="text-left">
-        Currently, Bolt only supports PNGs and JPEGs. Be patient with us as we
-        slowly begin supporting more types!
-      </p>
+      <p className="text-left">{errorMsg}</p>
     </div>
   );
 }
 
-function ModalExit() {
+function ModalExit({ onClose }: { onClose: () => void }) {
   return (
     <button onClick={onClose} className="absolute top-2.5 font-bold right-2.5">
       X
@@ -38,17 +35,19 @@ function ModalExit() {
 export default function UploadErrorModal({
   isOpen,
   onClose,
+  errorMsg,
 }: {
   isOpen: boolean;
   onClose: () => void;
+  errorMsg: string;
 }) {
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <div className="bg-accent-300 relative text-white rounded-lg w-[375px]">
         <ModalHeader />
         <hr />
-        <ModalBody />
-        <ModalExit />
+        <ModalBody errorMsg={errorMsg} />
+        <ModalExit onClose={onClose} />
       </div>
     </Modal>
   );

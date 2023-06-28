@@ -4,30 +4,8 @@ import getCurrentUser from '../actions/getCurrentUser';
 import { redirect } from 'next/navigation';
 import ImagesContextProvider from '../contexts/images/ImagesContextProvider';
 import LayoutClient from './LayoutHome';
+import { fetchImages } from '@/app/actions/image-actions';
 import MobileContextProvider from '../contexts/mobile/MobileContextProvider';
-
-async function fetchImages(userEmail: string) {
-  const url = `${process.env.API_BASEURL}/images`;
-
-  const params: { [key: string]: string } = {
-    email: userEmail,
-  };
-
-  const queryString: string = Object.keys(params)
-    .map(
-      (key) => `${encodeURIComponent(key)}=${encodeURIComponent(params[key])}`
-    )
-    .join('&');
-
-  const fullUrl: string = `${url}?${queryString}`;
-
-  const res = await fetch(fullUrl);
-
-  if (!res.ok) {
-    throw new Error('Error occurred when fetching posts');
-  }
-  return res.json();
-}
 
 export default async function RootLayout({
   children,
