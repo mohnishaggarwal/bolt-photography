@@ -3,7 +3,6 @@
 import { useEffect, useState } from 'react';
 import { useImagesContext } from '../contexts/images/ImagesContext';
 import DeleteImagesModal from '@/app/global_components/modals/DeleteImagesModal';
-import IImage from '../interfaces/image';
 import classNames from 'classnames';
 
 export default function DeleteMenu() {
@@ -22,16 +21,14 @@ export default function DeleteMenu() {
   };
 
   const handleClickDeleteAll = () => {
-    const imgsToDelete = state.images.filter(
-      (image: IImage) => image.trash
-    ).length;
+    const imgsToDelete = state.trashedImages.length;
     setNumImgsDelete(imgsToDelete);
     setDeleteAll(true);
     setModalOpen(true);
   };
 
   useEffect(() => {
-    const numTrash = state.images.filter((image: IImage) => image.trash).length;
+    const numTrash = state.trashedImages.length;
     setDeleteAllSelectable(numTrash > 0);
   }, [state.images]);
 

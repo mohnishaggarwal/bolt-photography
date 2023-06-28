@@ -18,7 +18,6 @@ export default function Dropdown() {
   }
 
   function handleSelect(option: string) {
-    console.log(option);
     if (option === 'Videos') {
       setIsModalOpen(true);
       return;

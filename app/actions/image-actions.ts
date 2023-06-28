@@ -1,5 +1,34 @@
 import APICallResult from '@/app/interfaces/api-call-result';
 
+async function deleteImages(email: string, images: string[]) {
+  const url = `${process.env.NEXT_PUBLIC_API_BASEURL}/images`;
+  console.log(url);
+
+  try {
+    const response = await fetch(url, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email, images }),
+    });
+
+    if (response.ok) {
+      console.log('Data successfully deleted.');
+    } else {
+      console.error(
+        'Failed to delete data:',
+        response.status,
+        response.statusText
+      );
+      // Handle the error case here
+    }
+  } catch (error) {
+    console.error('An error occurred while deleting data:', error);
+    // Handle any network or other errors here
+  }
+}
+
 async function postImages(
   email: string,
   images: File[]
@@ -72,8 +101,6 @@ async function fetchImages(userEmail: string) {
     email: userEmail,
   };
 
-  console.log(url.toString());
-
   const res = await fetch(url.toString());
 
   if (!res.ok) {
@@ -82,4 +109,4 @@ async function fetchImages(userEmail: string) {
   return res.json();
 }
 
-export { postImages, fetchImages };
+export { postImages, fetchImages, deleteImages };

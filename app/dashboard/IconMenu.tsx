@@ -33,13 +33,13 @@ export default function IconMenu() {
 
   const handleDownload = () => {
     state.selectedImages.forEach((image: IImage) => {
-      const url = URL.createObjectURL(image.file);
+      const url = URL.createObjectURL(image.src);
 
       const link = document.createElement('a');
       link.href = url;
 
       // Set the download attribute with the filename
-      link.setAttribute('download', image.file.name);
+      link.setAttribute('download', image.name);
 
       // Programmatically trigger a click on the link to initiate the download
       document.body.appendChild(link);

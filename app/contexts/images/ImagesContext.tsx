@@ -1,5 +1,6 @@
 import { createContext, useContext, Dispatch } from 'react';
 import IImage from '@/app/interfaces/image';
+import { deleteImages } from '@/app/actions/image-actions';
 
 export type ImageState = {
   images: IImage[];
@@ -24,7 +25,7 @@ type Action =
   | { type: 'FAVORITE_IMAGES' }
   | { type: 'RECOVER_IMAGES' }
   | { type: 'REMOVE_FROM_FAVORITES' }
-  | { type: 'DELETE_IMAGES' }
+  | { type: 'DELETE_IMAGES'; payload: string }
   | { type: 'DELETE_ALL_TRASH' };
 
 const initialState: ImageState = {
@@ -62,7 +63,7 @@ export const reducer = (state: ImageState, action: Action): ImageState => {
         if (selectedImgIndex == -1) {
           throw new Error("Selected image doesn't exist");
         }
-        const removedImage = state.images.splice(selectedImgIndex);
+        const removedImage = state.images.splice(selectedImgIndex, 1);
         state.trashedImages = [...state.trashedImages, ...removedImage];
       }
       return { ...state };
@@ -72,7 +73,7 @@ export const reducer = (state: ImageState, action: Action): ImageState => {
         if (selectedImgIndex == -1) {
           throw new Error("Selected image doesn't exist");
         }
-        const removedImage = state.images.splice(selectedImgIndex);
+        const removedImage = state.images.splice(selectedImgIndex, 1);
         state.favoritedImages = [...state.favoritedImages, ...removedImage];
       }
       return { ...state };
@@ -82,7 +83,7 @@ export const reducer = (state: ImageState, action: Action): ImageState => {
         if (selectedImgIndex == -1) {
           throw new Error("Selected image doesn't exist");
         }
-        const removedImage = state.favoritedImages.splice(selectedImgIndex);
+        const removedImage = state.favoritedImages.splice(selectedImgIndex, 1);
         state.images = [...state.images, ...removedImage];
       }
       return { ...state };
@@ -108,6 +109,10 @@ export const reducer = (state: ImageState, action: Action): ImageState => {
         }
         state.trashedImages.splice(selectedImgIndex, 1);
       }
+      deleteImages(
+        action.payload,
+        state.selectedImages.map((img: IImage) => img.name)
+      );
       return { ...state };
     case 'DELETE_ALL_TRASH':
       return { ...state, trashedImages: [], selectedImages: [] };

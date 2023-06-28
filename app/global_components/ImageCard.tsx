@@ -64,7 +64,7 @@ export default function ImageCard({
   return (
     <label
       className={classNames(
-        'relative w-full bg-accent-100 rounded-lg p-4 h-fit hover:cursor-pointer hover:bg-accent-200',
+        'w-full bg-accent-100 rounded-lg p-4 h-fit hover:cursor-pointer hover:bg-accent-200',
         { 'border-highlight border-2': isSelected }
       )}
       onClick={handleClick}

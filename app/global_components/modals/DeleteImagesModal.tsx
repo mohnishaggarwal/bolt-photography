@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import { useImagesContext } from '@/app/contexts/images/ImagesContext';
 import Modal from './Modal';
+import { useAuthContext } from '@/app/contexts/auth/AuthContext';
 
 export default function DeleteImagesModal({
   numImagesDelete,
@@ -14,12 +15,13 @@ export default function DeleteImagesModal({
   onClose: () => void;
 }) {
   const { dispatch } = useImagesContext();
+  const { user } = useAuthContext();
 
   const handleDelete = () => {
     if (deleteAll) {
       dispatch({ type: 'DELETE_ALL_TRASH' });
     } else {
-      dispatch({ type: 'DELETE_IMAGES' });
+      dispatch({ type: 'DELETE_IMAGES', payload: user.email });
     }
     onClose();
   };
