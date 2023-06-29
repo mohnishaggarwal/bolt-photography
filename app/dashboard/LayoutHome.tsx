@@ -20,7 +20,8 @@ export default function LayoutClient({ children }: { children: ReactNode }) {
       {isSidebarVisible && <Sidebar />}
       <div
         className={classNames('relative h-screen', {
-          'pl-72': isSidebarVisible,
+          'left-72 w-[calc(100%-18rem)]': isSidebarVisible,
+          'w-full': !isSidebarVisible,
         })}
       >
         <Header />

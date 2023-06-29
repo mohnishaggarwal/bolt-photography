@@ -89,7 +89,7 @@ export default function Sidebar() {
   setMenuOptions();
 
   return (
-    <div className="w-72 bg-accent-100 h-screen fixed z-10">
+    <div className="w-72 bg-accent-100 h-screen fixed">
       <div className="w-full flex flex-col">
         <div className="flex justify-center items-center h-48">
           <UploadButton />
