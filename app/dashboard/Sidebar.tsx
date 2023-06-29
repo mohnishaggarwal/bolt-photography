@@ -7,6 +7,7 @@ import UsageDisplay from './UsageDisplay';
 import UploadButton from './UploadButton';
 import { useImagesContext } from '../contexts/images/ImagesContext';
 import FeatureInProgressModal from '../global_components/modals/FeatureInProgressModal';
+import UploadSuccessModal from '../global_components/modals/UploadSuccessModal';
 
 export default function Sidebar() {
   let MenuOptions = [
@@ -18,7 +19,9 @@ export default function Sidebar() {
   ];
 
   const [menuItems, setMenuItems] = useState(MenuOptions);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isFeatureModalOpen, setIsFeatureModalOpen] = useState(false);
+  const [isUploadSuccessModalOpen, setIsUploadSuccessModalOpen] =
+    useState(false);
   const router = useRouter();
   const { dispatch } = useImagesContext();
 
@@ -53,7 +56,7 @@ export default function Sidebar() {
 
   function handleMenuSelection(menuItem: string) {
     if (menuItem === 'Hidden') {
-      setIsModalOpen(true);
+      setIsFeatureModalOpen(true);
       return;
     }
 
@@ -91,9 +94,11 @@ export default function Sidebar() {
   return (
     <>
       <div className="w-72 bg-accent-100 h-screen fixed">
-        <div className="w-full flex flex-col">
-          <div className="flex justify-center items-center h-48">
-            <UploadButton />
+        <div className="w-full">
+          <div className="flex relative justify-center items-center h-48">
+            <UploadButton
+              setIsUploadSuccessModalOpen={setIsUploadSuccessModalOpen}
+            />
           </div>
           {menuItems.map((menuItem, index) => (
             <SidebarItem
@@ -108,8 +113,12 @@ export default function Sidebar() {
         </div>
       </div>
       <FeatureInProgressModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
+        isOpen={isFeatureModalOpen}
+        onClose={() => setIsFeatureModalOpen(false)}
+      />
+      <UploadSuccessModal
+        isOpen={isUploadSuccessModalOpen}
+        onClose={() => setIsUploadSuccessModalOpen(false)}
       />
     </>
   );

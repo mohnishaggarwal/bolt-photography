@@ -1,22 +1,5 @@
 import APICallResult from '@/app/interfaces/api-call-result';
 
-async function deleteImages(email: string, images: string[]) {
-  const url = `${process.env.NEXT_PUBLIC_API_BASEURL}/images`;
-  console.log(url);
-
-  try {
-    await fetch(url, {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ email, images }),
-    });
-  } catch (error) {
-    console.error('An error occurred while deleting data:', error);
-  }
-}
-
 async function postImages(
   email: string,
   images: File[]
@@ -131,6 +114,23 @@ async function fetchImages(userEmail: string) {
     throw new Error('Error occurred when fetching posts');
   }
   return res.json();
+}
+
+async function deleteImages(email: string, images: string[]) {
+  const url = `${process.env.NEXT_PUBLIC_API_BASEURL}/images`;
+  console.log(url);
+
+  try {
+    await fetch(url, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email, images }),
+    });
+  } catch (error) {
+    console.error('An error occurred while deleting data:', error);
+  }
 }
 
 export { postImages, fetchImages, deleteImages, updateImages };

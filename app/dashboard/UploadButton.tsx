@@ -1,20 +1,22 @@
 'use client';
 
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, Dispatch, SetStateAction, useState } from 'react';
 import AddIcon from '@mui/icons-material/Add';
 import { useImagesContext } from '@/app/contexts/images/ImagesContext';
 import UploadErrorModal from '../global_components/modals/ErrorModal';
-import UploadSuccessModal from '../global_components/modals/UploadSuccessModal';
 import { postImages } from '@/app/actions/image-actions';
 import { useAuthContext } from '../contexts/auth/AuthContext';
 import APICallResult from '../interfaces/api-call-result';
 
-export default function UploadButton() {
+export default function UploadButton({
+  setIsUploadSuccessModalOpen,
+}: {
+  setIsUploadSuccessModalOpen: Dispatch<SetStateAction<boolean>>;
+}) {
   const { dispatch } = useImagesContext();
   const { user } = useAuthContext();
   const [errorModalOpen, setErrorModalOpen] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
-  const [successModalOpen, setSuccessModalOpen] = useState(false);
 
   const handleFileChange = async (event: ChangeEvent<HTMLInputElement>) => {
     const fileList = event.target.files;
@@ -43,7 +45,7 @@ export default function UploadButton() {
       }));
 
       dispatch({ type: 'ADD_IMAGES', payload: imageNamesAndUrls });
-      setSuccessModalOpen(true);
+      setIsUploadSuccessModalOpen(true);
     } else {
       setErrorMsg(apiResponse.errorMsg);
       setErrorModalOpen(true);
@@ -52,7 +54,7 @@ export default function UploadButton() {
 
   return (
     <>
-      <label className="w-3/5 min-w-[150px] z-20 bg-accent-300 hover:bg-accent-200 rounded-full shadow-lg py-2 px-4 text-center text-white cursor-pointer">
+      <label className="w-3/5 min-w-[150px] bg-accent-300 hover:bg-accent-200 rounded-full shadow-lg py-2 px-4 text-center text-white cursor-pointer">
         <div className="flex justify-evenly items-center w-full my-1">
           Add New
           <AddIcon color="secondary" fontSize="large" />
@@ -72,12 +74,6 @@ export default function UploadButton() {
           />
         )}
       </label>
-      {successModalOpen && (
-        <UploadSuccessModal
-          isOpen={successModalOpen}
-          onClose={() => setSuccessModalOpen(false)}
-        />
-      )}
     </>
   );
 }

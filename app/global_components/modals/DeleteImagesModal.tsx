@@ -19,7 +19,7 @@ export default function DeleteImagesModal({
 
   const handleDelete = () => {
     if (deleteAll) {
-      dispatch({ type: 'DELETE_ALL_TRASH' });
+      dispatch({ type: 'DELETE_ALL_TRASH', payload: user.email });
     } else {
       dispatch({ type: 'DELETE_IMAGES', payload: user.email });
     }

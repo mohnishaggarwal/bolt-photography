@@ -26,7 +26,7 @@ type Action =
   | { type: 'RECOVER_IMAGES' }
   | { type: 'REMOVE_FROM_FAVORITES' }
   | { type: 'DELETE_IMAGES'; payload: string }
-  | { type: 'DELETE_ALL_TRASH' };
+  | { type: 'DELETE_ALL_TRASH'; payload: string };
 
 const initialState: ImageState = {
   images: [],
@@ -45,7 +45,7 @@ export const reducer = (state: ImageState, action: Action): ImageState => {
         uploadTime: Math.floor(Date.now() / 1000),
         tags: [] as string[],
       }));
-      const mergedImages = [...state.images, ...newImages];
+      const mergedImages = [...newImages, ...state.images];
       return { ...state, images: mergedImages };
     case 'RECOVER_IMAGES':
       for (const selectedImg of state.selectedImages) {
@@ -56,7 +56,7 @@ export const reducer = (state: ImageState, action: Action): ImageState => {
         const removedImage = state.trashedImages.splice(selectedImgIndex);
         state.images = [...state.images, ...removedImage];
       }
-      return { ...state };
+      return { ...state, selectedImages: [] };
     case 'TRASH_IMAGES':
       for (const selectedImg of state.selectedImages) {
         let selectedImgIndex = state.images.indexOf(selectedImg);
@@ -69,7 +69,7 @@ export const reducer = (state: ImageState, action: Action): ImageState => {
         }
         state.trashedImages = [...state.trashedImages, ...removedImage];
       }
-      return { ...state };
+      return { ...state, selectedImages: [] };
     case 'FAVORITE_IMAGES':
       for (const selectedImg of state.selectedImages) {
         const selectedImgIndex = state.images.indexOf(selectedImg);
@@ -79,7 +79,7 @@ export const reducer = (state: ImageState, action: Action): ImageState => {
         const removedImage = state.images.splice(selectedImgIndex, 1);
         state.favoritedImages = [...state.favoritedImages, ...removedImage];
       }
-      return { ...state };
+      return { ...state, selectedImages: [] };
     case 'REMOVE_FROM_FAVORITES':
       for (const selectedImg of state.selectedImages) {
         const selectedImgIndex = state.favoritedImages.indexOf(selectedImg);
@@ -89,7 +89,7 @@ export const reducer = (state: ImageState, action: Action): ImageState => {
         const removedImage = state.favoritedImages.splice(selectedImgIndex, 1);
         state.images = [...state.images, ...removedImage];
       }
-      return { ...state };
+      return { ...state, selectedImages: [] };
     case 'SET_SELECTED':
       return { ...state, selectedImages: [action.payload] };
     case 'ADD_TO_SELECTED':
@@ -116,8 +116,12 @@ export const reducer = (state: ImageState, action: Action): ImageState => {
         action.payload,
         state.selectedImages.map((img: IImage) => img.name)
       );
-      return { ...state };
+      return { ...state, selectedImages: [] };
     case 'DELETE_ALL_TRASH':
+      deleteImages(
+        action.payload,
+        state.trashedImages.map((img: IImage) => img.name)
+      );
       return { ...state, trashedImages: [], selectedImages: [] };
     case 'RESET_SELECTED':
       return { ...state, selectedImages: [] };
