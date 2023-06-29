@@ -11,7 +11,7 @@ function ModalHeader() {
         height={32}
         className="object-contain"
       />
-      <h2 className="ml-4 font-bold text-2xl">Image Upload Error</h2>
+      <h2 className="ml-4 font-bold text-2xl">An Error Occurred 😕</h2>
     </div>
   );
 }
@@ -32,7 +32,7 @@ function ModalExit({ onClose }: { onClose: () => void }) {
   );
 }
 
-export default function UploadErrorModal({
+export default function ErrorModal({
   isOpen,
   onClose,
   errorMsg,

@@ -7,28 +7,62 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import DownloadIcon from '@mui/icons-material/Download';
 import { useImagesContext } from '../contexts/images/ImagesContext';
+import { updateImages } from '@/app/actions/image-actions';
 import classNames from 'classnames';
 import { usePathname } from 'next/navigation';
 import IImage from '../interfaces/image';
 import FeatureInProgressModal from '../global_components/modals/FeatureInProgressModal';
+import APICallResult from '../interfaces/api-call-result';
+import { useAuthContext } from '../contexts/auth/AuthContext';
+import ErrorModal from '../global_components/modals/ErrorModal';
 
 export default function IconMenu() {
+  const { user } = useAuthContext();
   const { state, dispatch } = useImagesContext();
+  const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
+  const [errorMsg, setErrorMsg] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isClickable, setIsClickable] = useState(true);
   const pathname = usePathname();
   const currentPath = pathname.split('/').pop() || '';
 
-  const handleTrash = () => {
-    dispatch({ type: 'TRASH_IMAGES' });
+  const handleApiCall = async (updateParam: string): Promise<APICallResult> => {
+    const res = await updateImages(
+      user.email,
+      state.selectedImages.map((img: IImage) => img.name),
+      updateParam
+    );
+    return res;
   };
 
-  const handleFavorite = () => {
-    dispatch({ type: 'FAVORITE_IMAGES' });
+  const handleTrash = async () => {
+    const apiCallResult: APICallResult = await handleApiCall('TRASH');
+    if (apiCallResult.wasCallSuccessful) {
+      dispatch({ type: 'TRASH_IMAGES' });
+    } else {
+      setErrorMsg(apiCallResult.errorMsg);
+      setIsErrorModalOpen(true);
+    }
   };
 
-  const handleUnfavorite = () => {
-    dispatch({ type: 'REMOVE_FROM_FAVORITES' });
+  const handleFavorite = async () => {
+    const apiCallResult: APICallResult = await handleApiCall('FAVORITE');
+    if (apiCallResult.wasCallSuccessful) {
+      dispatch({ type: 'FAVORITE_IMAGES' });
+    } else {
+      setErrorMsg(apiCallResult.errorMsg);
+      setIsErrorModalOpen(true);
+    }
+  };
+
+  const handleUnfavorite = async () => {
+    const apiCallResult: APICallResult = await handleApiCall('NORMAL');
+    if (apiCallResult.wasCallSuccessful) {
+      dispatch({ type: 'REMOVE_FROM_FAVORITES' });
+    } else {
+      setErrorMsg(apiCallResult.errorMsg);
+      setIsErrorModalOpen(true);
+    }
   };
 
   const handleDownload = () => {
@@ -128,6 +162,11 @@ export default function IconMenu() {
       <FeatureInProgressModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
+      />
+      <ErrorModal
+        isOpen={isErrorModalOpen}
+        onClose={() => setIsErrorModalOpen(false)}
+        errorMsg={errorMsg}
       />
     </div>
   );

@@ -3,7 +3,7 @@
 import { ChangeEvent, useState } from 'react';
 import AddIcon from '@mui/icons-material/Add';
 import { useImagesContext } from '@/app/contexts/images/ImagesContext';
-import UploadErrorModal from '../global_components/modals/UploadErrorModal';
+import UploadErrorModal from '../global_components/modals/ErrorModal';
 import UploadSuccessModal from '../global_components/modals/UploadSuccessModal';
 import { postImages } from '@/app/actions/image-actions';
 import { useAuthContext } from '../contexts/auth/AuthContext';

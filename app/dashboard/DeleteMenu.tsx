@@ -4,8 +4,14 @@ import { useEffect, useState } from 'react';
 import { useImagesContext } from '../contexts/images/ImagesContext';
 import DeleteImagesModal from '@/app/global_components/modals/DeleteImagesModal';
 import classNames from 'classnames';
+import APICallResult from '../interfaces/api-call-result';
+import { updateImages } from '../actions/image-actions';
+import { useAuthContext } from '../contexts/auth/AuthContext';
+import IImage from '../interfaces/image';
+import ErrorModal from '../global_components/modals/ErrorModal';
 
 export default function DeleteMenu() {
+  const { user } = useAuthContext();
   const { state, dispatch } = useImagesContext();
   const [modalOpen, setModalOpen] = useState(false);
   const [numImgsDelete, setNumImgsDelete] = useState(0);
@@ -13,6 +19,8 @@ export default function DeleteMenu() {
   const [recoverSelectable, setRecoverSelectable] = useState(false);
   const [deleteSelectable, setDeleteSelectable] = useState(false);
   const [deleteAll, setDeleteAll] = useState(false);
+  const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
+  const [errorMsg, setErrorMsg] = useState('');
 
   const handleClickDelete = () => {
     setNumImgsDelete(state.selectedImages.length);
@@ -21,10 +29,23 @@ export default function DeleteMenu() {
   };
 
   const handleClickDeleteAll = () => {
-    const imgsToDelete = state.trashedImages.length;
-    setNumImgsDelete(imgsToDelete);
+    setNumImgsDelete(state.trashedImages.length);
     setDeleteAll(true);
     setModalOpen(true);
+  };
+
+  const handleRecover = async () => {
+    const apiCallResult: APICallResult = await updateImages(
+      user.email,
+      state.selectedImages.map((img: IImage) => img.name),
+      'NORMAL'
+    );
+    if (apiCallResult.wasCallSuccessful) {
+      dispatch({ type: 'RECOVER_IMAGES' });
+    } else {
+      setErrorMsg(apiCallResult.errorMsg);
+      setIsErrorModalOpen(true);
+    }
   };
 
   useEffect(() => {
@@ -46,7 +67,7 @@ export default function DeleteMenu() {
             'pointer-events-none': !recoverSelectable,
           }
         )}
-        onClick={() => dispatch({ type: 'RECOVER_IMAGES' })}
+        onClick={handleRecover}
       >
         <p>Recover</p>
       </button>
@@ -77,6 +98,11 @@ export default function DeleteMenu() {
         numImagesDelete={numImgsDelete.toString()}
         isOpen={modalOpen}
         onClose={() => setModalOpen(false)}
+      />
+      <ErrorModal
+        isOpen={isErrorModalOpen}
+        onClose={() => setIsErrorModalOpen(false)}
+        errorMsg={errorMsg}
       />
     </div>
   );

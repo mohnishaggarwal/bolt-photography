@@ -59,11 +59,14 @@ export const reducer = (state: ImageState, action: Action): ImageState => {
       return { ...state };
     case 'TRASH_IMAGES':
       for (const selectedImg of state.selectedImages) {
-        const selectedImgIndex = state.images.indexOf(selectedImg);
+        let selectedImgIndex = state.images.indexOf(selectedImg);
+        let removedImage: IImage[];
         if (selectedImgIndex == -1) {
-          throw new Error("Selected image doesn't exist");
+          selectedImgIndex = state.favoritedImages.indexOf(selectedImg);
+          removedImage = state.favoritedImages.splice(selectedImgIndex, 1);
+        } else {
+          removedImage = state.images.splice(selectedImgIndex, 1);
         }
-        const removedImage = state.images.splice(selectedImgIndex, 1);
         state.trashedImages = [...state.trashedImages, ...removedImage];
       }
       return { ...state };

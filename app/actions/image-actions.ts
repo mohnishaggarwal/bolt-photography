@@ -5,27 +5,15 @@ async function deleteImages(email: string, images: string[]) {
   console.log(url);
 
   try {
-    const response = await fetch(url, {
+    await fetch(url, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({ email, images }),
     });
-
-    if (response.ok) {
-      console.log('Data successfully deleted.');
-    } else {
-      console.error(
-        'Failed to delete data:',
-        response.status,
-        response.statusText
-      );
-      // Handle the error case here
-    }
   } catch (error) {
     console.error('An error occurred while deleting data:', error);
-    // Handle any network or other errors here
   }
 }
 
@@ -93,13 +81,49 @@ async function postImages(
   };
 }
 
+async function updateImages(
+  userEmail: string,
+  imageNames: string[],
+  updateParam: string
+): Promise<APICallResult> {
+  const url = `${process.env.NEXT_PUBLIC_API_BASEURL}/images`;
+
+  try {
+    const result = await fetch(url, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        email: userEmail,
+        images: imageNames,
+        update_parameter: updateParam,
+      }),
+    });
+    if (!result.ok) {
+      return {
+        wasCallSuccessful: false,
+        errorMsg:
+          "Sorry, we're having issues. We weren't able to update your image. It may be a minor issue, try again!",
+      };
+    }
+  } catch (error) {
+    console.log(error);
+    return {
+      wasCallSuccessful: false,
+      errorMsg:
+        "Sorry, we're having issues. We weren't able to update your image. Our servers are most likely down, try again later!",
+    };
+  }
+  return {
+    wasCallSuccessful: true,
+    errorMsg: '',
+  };
+}
+
 async function fetchImages(userEmail: string) {
   const url = new URL(`${process.env.NEXT_PUBLIC_API_BASEURL}/images`);
   url.searchParams.append('email', userEmail);
-
-  const params: { [key: string]: string } = {
-    email: userEmail,
-  };
 
   const res = await fetch(url.toString());
 
@@ -109,4 +133,4 @@ async function fetchImages(userEmail: string) {
   return res.json();
 }
 
-export { postImages, fetchImages, deleteImages };
+export { postImages, fetchImages, deleteImages, updateImages };

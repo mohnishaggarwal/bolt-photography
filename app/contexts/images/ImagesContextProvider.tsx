@@ -7,7 +7,7 @@ import IImage from '@/app/interfaces/image';
 interface IFetchImage {
   name: string;
   url: string;
-  tags: Array<{ Key: string; value: string }>;
+  tags: Array<{ Key: string; Value: string }>;
 }
 
 interface IProps {
@@ -30,9 +30,9 @@ const getInitialState = (fetchedImages: IFetchImage[]) => {
     let uploadTime: number = 0;
     for (const awsTag of fetchedImage.tags) {
       if (awsTag.Key === 'typeOfImg') {
-        typeOf = awsTag.value;
+        typeOf = awsTag.Value;
       } else if (awsTag.Key === 'uploadTime') {
-        uploadTime = parseInt(awsTag.value);
+        uploadTime = parseInt(awsTag.Value);
       } else {
         imgTags.push(awsTag.Key);
       }
@@ -56,6 +56,7 @@ const getInitialState = (fetchedImages: IFetchImage[]) => {
         initialState.hiddenImages.push(img);
         break;
       case 'FAVORITE':
+        console.log(typeOf);
         initialState.favoritedImages.push(img);
         break;
       default:
