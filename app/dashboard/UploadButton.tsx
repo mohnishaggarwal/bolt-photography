@@ -3,20 +3,42 @@
 import { ChangeEvent, Dispatch, SetStateAction, useState } from 'react';
 import AddIcon from '@mui/icons-material/Add';
 import { useImagesContext } from '@/app/contexts/images/ImagesContext';
-import UploadErrorModal from '../global_components/modals/ErrorModal';
 import { postImages } from '@/app/actions/image-actions';
+import IImage from '@/app/interfaces/image';
 import { useAuthContext } from '../contexts/auth/AuthContext';
 import APICallResult from '../interfaces/api-call-result';
 
 export default function UploadButton({
   setIsUploadSuccessModalOpen,
+  setErrorModalOpen,
+  setErrorMsg,
 }: {
   setIsUploadSuccessModalOpen: Dispatch<SetStateAction<boolean>>;
+  setErrorModalOpen: Dispatch<SetStateAction<boolean>>;
+  setErrorMsg: Dispatch<SetStateAction<string>>;
 }) {
-  const { dispatch } = useImagesContext();
+  const { state, dispatch } = useImagesContext();
   const { user } = useAuthContext();
-  const [errorModalOpen, setErrorModalOpen] = useState(false);
-  const [errorMsg, setErrorMsg] = useState('');
+
+  const getOnlyImageNames = (images: IImage[]): string[] => {
+    return images.map((image: IImage) => image.name);
+  };
+
+  const doImagesExist = (imageNames: string[]) => {
+    const allImages: string[] = [
+      ...getOnlyImageNames(state.images),
+      ...getOnlyImageNames(state.favoritedImages),
+      ...getOnlyImageNames(state.hiddenImages),
+      ...getOnlyImageNames(state.trashedImages),
+    ];
+    console.log(allImages, imageNames);
+    for (const imageName of imageNames) {
+      if (allImages.includes(imageName)) {
+        return true;
+      }
+    }
+    return false;
+  };
 
   const handleFileChange = async (event: ChangeEvent<HTMLInputElement>) => {
     const fileList = event.target.files;
@@ -33,6 +55,12 @@ export default function UploadButton({
     const jpgsAndPngs = Array.from(fileList!).filter((file) =>
       /\.(jpg|png)$/i.test(file.name)
     );
+
+    if (doImagesExist(jpgsAndPngs.map((image: File) => image.name))) {
+      setErrorMsg('You cannot upload two images with the same name!');
+      setErrorModalOpen(true);
+      return;
+    }
 
     const apiResponse: APICallResult = await postImages(
       user.email,
@@ -66,13 +94,6 @@ export default function UploadButton({
           className="hidden"
           onChange={handleFileChange}
         />
-        {errorModalOpen && (
-          <UploadErrorModal
-            isOpen={errorModalOpen}
-            onClose={() => setErrorModalOpen(false)}
-            errorMsg={errorMsg}
-          />
-        )}
       </label>
     </>
   );

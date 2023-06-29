@@ -74,6 +74,7 @@ export default function ImagesContextProvider({
 }: IProps) {
   const initialState = getInitialState(fetchedImages);
   const [state, dispatch] = useReducer(reducer, initialState);
+
   return (
     <ImagesContext.Provider value={{ state, dispatch }}>
       {children}

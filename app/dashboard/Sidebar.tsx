@@ -8,6 +8,7 @@ import UploadButton from './UploadButton';
 import { useImagesContext } from '../contexts/images/ImagesContext';
 import FeatureInProgressModal from '../global_components/modals/FeatureInProgressModal';
 import UploadSuccessModal from '../global_components/modals/UploadSuccessModal';
+import ErrorModal from '../global_components/modals/ErrorModal';
 
 export default function Sidebar() {
   let MenuOptions = [
@@ -22,6 +23,8 @@ export default function Sidebar() {
   const [isFeatureModalOpen, setIsFeatureModalOpen] = useState(false);
   const [isUploadSuccessModalOpen, setIsUploadSuccessModalOpen] =
     useState(false);
+  const [errorModalOpen, setErrorModalOpen] = useState(false);
+  const [errorMsg, setErrorMsg] = useState('');
   const router = useRouter();
   const { dispatch } = useImagesContext();
 
@@ -98,6 +101,8 @@ export default function Sidebar() {
           <div className="flex relative justify-center items-center h-48">
             <UploadButton
               setIsUploadSuccessModalOpen={setIsUploadSuccessModalOpen}
+              setErrorModalOpen={setErrorModalOpen}
+              setErrorMsg={setErrorMsg}
             />
           </div>
           {menuItems.map((menuItem, index) => (
@@ -119,6 +124,11 @@ export default function Sidebar() {
       <UploadSuccessModal
         isOpen={isUploadSuccessModalOpen}
         onClose={() => setIsUploadSuccessModalOpen(false)}
+      />
+      <ErrorModal
+        isOpen={errorModalOpen}
+        onClose={() => setErrorModalOpen(false)}
+        errorMsg={errorMsg}
       />
     </>
   );
