@@ -19,7 +19,7 @@ export default function LayoutClient({ children }: { children: ReactNode }) {
     <div className="bg-base text-white">
       {isSidebarVisible && <Sidebar />}
       <div
-        className={classNames('relative h-screen', {
+        className={classNames('relative z-auto h-screen', {
           'left-72 w-[calc(100%-18rem)]': isSidebarVisible,
           'w-full': !isSidebarVisible,
         })}

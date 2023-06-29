@@ -89,26 +89,28 @@ export default function Sidebar() {
   setMenuOptions();
 
   return (
-    <div className="w-72 bg-accent-100 h-screen fixed">
-      <div className="w-full flex flex-col">
-        <div className="flex justify-center items-center h-48">
-          <UploadButton />
+    <>
+      <div className="w-72 bg-accent-100 h-screen fixed">
+        <div className="w-full flex flex-col">
+          <div className="flex justify-center items-center h-48">
+            <UploadButton />
+          </div>
+          {menuItems.map((menuItem, index) => (
+            <SidebarItem
+              name={menuItem.name}
+              selected={menuItem.selected}
+              changeSelection={handleMenuSelection}
+              key={index}
+            />
+          ))}
+          <hr className="my-4 border-accent-300" />
+          <UsageDisplay />
         </div>
-        {menuItems.map((menuItem, index) => (
-          <SidebarItem
-            name={menuItem.name}
-            selected={menuItem.selected}
-            changeSelection={handleMenuSelection}
-            key={index}
-          />
-        ))}
-        <hr className="my-4 border-accent-300" />
-        <UsageDisplay />
-        <FeatureInProgressModal
-          isOpen={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
-        />
       </div>
-    </div>
+      <FeatureInProgressModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      />
+    </>
   );
 }

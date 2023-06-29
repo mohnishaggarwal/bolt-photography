@@ -91,7 +91,7 @@ export default function IconMenu() {
   }, [state.selectedImages]);
 
   return (
-    <div className="flex items-center z-10 justify-center">
+    <div className="flex items-center justify-center">
       <button
         className={classNames(' rounded-full p-1', {
           'hover:bg-accent-300': isClickable,
@@ -146,7 +146,7 @@ export default function IconMenu() {
         )}
       </button>
       <button
-        className={classNames('z-30 rounded-full p-1', {
+        className={classNames('rounded-full p-1', {
           'hover:bg-accent-300': isClickable,
           'pointer-events-none': !isClickable,
         })}

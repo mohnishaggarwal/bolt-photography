@@ -59,7 +59,7 @@ export default function DeleteMenu() {
   }, [state.selectedImages]);
 
   return (
-    <div className="flex justify-between w-64 text-accent-400 z-40">
+    <div className="flex justify-between w-64 text-accent-400">
       <button
         className={classNames(
           'hover:bg-accent-100 p-2 hover:text-white rounded-md',

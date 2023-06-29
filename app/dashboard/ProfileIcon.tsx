@@ -37,8 +37,7 @@ export default function ProfileIcon() {
       <div
         className={classNames(
           'absolute bg-accent-300 top-[92%] mt-1 w-fit rounded shadow-lg transition-opacity right-0.5',
-          { 'opacity-0': !isOpen, 'opactiy-100': isOpen },
-          { 'z-50': isOpen, 'z-0 pointer-events-none': !isOpen }
+          { 'opacity-0 pointer-events-none': !isOpen, 'opactiy-100': isOpen }
         )}
       >
         {ProfileOptions.map((option, index) => (
