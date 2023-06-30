@@ -1,6 +1,6 @@
 import { createContext, useContext, Dispatch } from 'react';
 import IImage from '@/app/interfaces/image';
-import { deleteImages } from '@/app/actions/image-actions';
+import { deleteImages } from '@/app/actions/image';
 
 export type ImageState = {
   images: IImage[];

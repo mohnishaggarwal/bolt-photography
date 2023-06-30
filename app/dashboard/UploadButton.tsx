@@ -3,7 +3,7 @@
 import { ChangeEvent, Dispatch, SetStateAction, useState } from 'react';
 import AddIcon from '@mui/icons-material/Add';
 import { useImagesContext } from '@/app/contexts/images/ImagesContext';
-import { postImages } from '@/app/actions/image-actions';
+import { postImages } from '@/app/actions/image';
 import IImage from '@/app/interfaces/image';
 import { useAuthContext } from '../contexts/auth/AuthContext';
 import APICallResult from '../interfaces/api-call-result';

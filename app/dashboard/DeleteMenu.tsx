@@ -5,7 +5,7 @@ import { useImagesContext } from '../contexts/images/ImagesContext';
 import DeleteImagesModal from '@/app/global_components/modals/DeleteImagesModal';
 import classNames from 'classnames';
 import APICallResult from '../interfaces/api-call-result';
-import { updateImages } from '../actions/image-actions';
+import { updateImages } from '../actions/image';
 import { useAuthContext } from '../contexts/auth/AuthContext';
 import IImage from '../interfaces/image';
 import ErrorModal from '../global_components/modals/ErrorModal';

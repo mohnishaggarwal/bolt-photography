@@ -1,5 +1,3 @@
-'use client';
-
 import StorageIcon from '@mui/icons-material/Storage';
 import Meter from './Meter';
 

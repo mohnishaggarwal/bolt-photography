@@ -7,7 +7,7 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import DownloadIcon from '@mui/icons-material/Download';
 import { useImagesContext } from '../contexts/images/ImagesContext';
-import { updateImages } from '@/app/actions/image-actions';
+import { updateImages } from '@/app/actions/image';
 import classNames from 'classnames';
 import { usePathname } from 'next/navigation';
 import IImage from '../interfaces/image';

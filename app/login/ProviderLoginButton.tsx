@@ -5,6 +5,7 @@ import GoogleIcon from '@mui/icons-material/Google';
 import InstagramIcon from '@mui/icons-material/Instagram';
 import GithubIcon from '@mui/icons-material/Github';
 import { signIn } from 'next-auth/react';
+import Image from 'next/image';
 
 export default function ProviderLoginButton({
   providerName,
@@ -14,13 +15,35 @@ export default function ProviderLoginButton({
   function getProviderIcon() {
     switch (providerName) {
       case 'Google':
-        return <GoogleIcon />;
+        return (
+          <Image
+            src="/images/google.svg"
+            alt="Not found image"
+            width={25}
+            height={25}
+            className="object-contain ml-2"
+          />
+        );
       case 'Facebook':
-        return <FacebookIcon />;
-      case 'Instagram':
-        return <InstagramIcon />;
+        return (
+          <Image
+            src="/images/facebook.svg"
+            alt="Not found image"
+            width={25}
+            height={25}
+            className="object-contain rounded-md bg-white ml-2"
+          />
+        );
       case 'Github':
-        return <GithubIcon />;
+        return (
+          <Image
+            src="/images/github.svg"
+            alt="Not found image"
+            width={25}
+            height={25}
+            className="object-contain ml-2"
+          />
+        );
     }
   }
 
