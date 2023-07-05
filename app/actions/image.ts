@@ -87,7 +87,7 @@ async function updateImages(
       return {
         wasCallSuccessful: false,
         errorMsg:
-          'Sorry, we are having issues. We were not able to update your image. It may be a minor issue, try again!',
+          "Sorry, we're having issues. We were not able to update your image. It may be a minor issue, try again!",
       };
     }
   } catch (error) {
